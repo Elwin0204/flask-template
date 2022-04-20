@@ -1,12 +1,17 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
 
 from flask import Flask, make_response
 from modules.test.views import demo_bp
 from flask_cors import CORS
+import logging
+from utils.log_handler import LogHandler
 
 
 class App(object):
     def __init__(self):
+        # set global log handler object
+        logging.getLogger().addHandler(LogHandler.make_log_handler())
         self.app = Flask(__name__)
         self.app.register_blueprint(demo_bp)
         CORS(self.app, supports_credentials=True)
@@ -22,9 +27,9 @@ class App(object):
             return resp
 
         # 请求拦截：可以在请求进入app.route之前做一些操作
-        @self.app.before_request
-        def before_request(resp):
-            pass
+        # @self.app.before_request
+        # def before_request(resp):
+        #     pass
 
     def start(self):
         self.app.run(host='0.0.0.0', port=8080)
